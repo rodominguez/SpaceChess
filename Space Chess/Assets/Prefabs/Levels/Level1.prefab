@@ -1189,6 +1189,7 @@ MonoBehaviour:
   targets:
   - {fileID: 2452627399076868385}
   - {fileID: 890912323600881136}
+  maxBounces: 1
 --- !u!1 &1954395408431046478
 GameObject:
   m_ObjectHideFlags: 0
@@ -5282,6 +5283,7 @@ MonoBehaviour:
   projectiles:
   - {fileID: 1374267004960804, guid: 10a196906512b5141bfd56285ee6c562, type: 3}
   parent: {fileID: 3215434970742205740}
+  levelManager: {fileID: 0}
 --- !u!114 &8797658017200865491
 MonoBehaviour:
   m_ObjectHideFlags: 0

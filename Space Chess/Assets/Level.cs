@@ -5,10 +5,21 @@ using UnityEngine;
 public class Level : MonoBehaviour
 {
     [SerializeField] List<GameObject> targets = new List<GameObject>();
+    [SerializeField] private int maxBounces;
 
     private bool isFinished;
 
     private bool isDying;
+    private int currentBounces;
+
+    private bool isCanFire;
+    private GameObject bullet;
+
+    private void Start()
+    {
+        isCanFire = true;
+        currentBounces = maxBounces;
+    }
 
     private void Update()
     {
@@ -45,5 +56,26 @@ public class Level : MonoBehaviour
     public bool IsFinished()
     {
         return isFinished;
+    }
+
+    public bool IsNeedToRestart()
+    {
+        return !isCanFire && bullet == null && !isFinished;
+    }
+
+    public void SubstractBounce()
+    {
+        currentBounces--;
+    }
+
+    public void SetBullet(GameObject bullet)
+    {
+        this.bullet = bullet;
+        isCanFire = false;
+    }
+
+    public bool IsCanFire()
+    {
+        return isCanFire;
     }
 }

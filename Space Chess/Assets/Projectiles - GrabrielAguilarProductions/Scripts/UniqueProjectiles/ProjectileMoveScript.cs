@@ -40,6 +40,8 @@ public class ProjectileMoveScript : MonoBehaviour
 
     private float timeToBounce = 0;
 
+    private Level level;
+
     [System.NonSerialized] public Vector3 offset;
     [System.NonSerialized] public float range;
     [System.NonSerialized] public float startTime;
@@ -64,6 +66,10 @@ public class ProjectileMoveScript : MonoBehaviour
         if (!isNotDestroy)
             StartCoroutine(waiter());
     }
+    private void Update()
+    {
+        DestroyIfLevelComplete();
+    }
 
     void FixedUpdate()
     {
@@ -78,6 +84,12 @@ public class ProjectileMoveScript : MonoBehaviour
         Bounce();
     }
 
+    void DestroyIfLevelComplete()
+    {
+        if (level.IsFinished())
+            Destroy(gameObject);
+    }
+
     void Bounce()
     {
         if (transform.localPosition.x <= -3.5)
@@ -86,6 +98,7 @@ public class ProjectileMoveScript : MonoBehaviour
 
             transform.LookAt(transform.position + direction * 10);
             transform.localPosition = new Vector3(-3.5f, transform.localPosition.y, transform.localPosition.z);
+            level.SubstractBounce();
         }   
         else if (transform.localPosition.x >= 3.5)
         {
@@ -93,6 +106,7 @@ public class ProjectileMoveScript : MonoBehaviour
 
             transform.LookAt(transform.position + direction * 10);
             transform.localPosition = new Vector3(3.5f, transform.localPosition.y, transform.localPosition.z);
+            level.SubstractBounce();
         }
         else if (transform.localPosition.y >= -0.5)
         {
@@ -100,6 +114,7 @@ public class ProjectileMoveScript : MonoBehaviour
 
             transform.LookAt(transform.position + direction * 10);
             transform.localPosition = new Vector3(transform.localPosition.x, -0.5f, transform.localPosition.z);
+            level.SubstractBounce();
         }
         else if (transform.localPosition.y <= -7.5)
         {
@@ -107,6 +122,7 @@ public class ProjectileMoveScript : MonoBehaviour
 
             transform.LookAt(transform.position + direction * 10);
             transform.localPosition = new Vector3(transform.localPosition.x, -7.5f, transform.localPosition.z);
+            level.SubstractBounce();
         } 
     }
 
@@ -130,8 +146,30 @@ public class ProjectileMoveScript : MonoBehaviour
             transform.LookAt(transform.position + direction * 10);
     }
 
+    public float Bounce(GameObject wall)
+    {
+        Vector3 direction = new Vector3(transform.forward.x * -1, transform.forward.y, transform.forward.z);
+
+        transform.LookAt(transform.position + direction * 10);
+        transform.position = wall.transform.position;
+
+        level.SubstractBounce();
+
+        return Time.time + 0.3f;
+    }
+
     public GameObject getMuzzlePrefab()
     {
         return muzzlePrefab;
     }
+
+    public void SetLevel(Level level)
+    {
+        this.level = level;
+    }
+
+    public Level GetLevel()
+    {
+        return level;
+    } 
 }

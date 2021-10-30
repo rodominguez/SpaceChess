@@ -109,6 +109,10 @@ PrefabInstance:
       propertyPath: targets.Array.data[2]
       value: 
       objectReference: {fileID: 4945299591649437657}
+    - target: {fileID: 3536112518483890984, guid: f00b11cf1b43b964593f7fd8029bdb5a, type: 3}
+      propertyPath: maxBounces
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4773051398254639025, guid: f00b11cf1b43b964593f7fd8029bdb5a, type: 3}
       propertyPath: m_IsActive
       value: 0

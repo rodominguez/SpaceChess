@@ -19,7 +19,18 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        ChangeLevel();    
+        ChangeLevel();
+        RestartLevel();
+    }
+
+    private void RestartLevel()
+    {
+        if (currentLevel == null) return;
+        if (currentLevel.GetComponent<Level>().IsNeedToRestart())
+        {
+            Destroy(currentLevel);
+            SpawnLevel();
+        }
     }
 
     private void ChangeLevel()
@@ -44,5 +55,10 @@ public class LevelManager : MonoBehaviour
         GameObject level = Instantiate(levels[currentLevelIndex], Vector3.zero, Quaternion.identity);
         level.transform.parent = transform;
         currentLevel = level;
+    }
+
+    public Level GetCurrentLevel()
+    {
+        return currentLevel.GetComponent<Level>();
     }
 }

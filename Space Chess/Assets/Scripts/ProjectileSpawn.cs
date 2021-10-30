@@ -11,6 +11,8 @@ public class ProjectileSpawn : MonoBehaviour
 
     [SerializeField] private Transform parent;
 
+    [SerializeField] private LevelManager levelManager;
+
     private int currentIndex = 0;
 
     // Start is called before the first frame update
@@ -28,7 +30,7 @@ public class ProjectileSpawn : MonoBehaviour
     void Shoot()
     {
         GameObject effectToSpawnRight = projectiles[currentIndex];
-        if (InputManager.Instance.GetShoot(1f / effectToSpawnRight.GetComponent<ProjectileMoveScript>().fireRate))
+        if (InputManager.Instance.GetShoot(1f / effectToSpawnRight.GetComponent<ProjectileMoveScript>().fireRate) && levelManager.GetCurrentLevel().IsCanFire())
         {
             GameObject vfx;
 
@@ -39,6 +41,9 @@ public class ProjectileSpawn : MonoBehaviour
                 vfx = Instantiate(effectToSpawnRight, spawnPoint.position, Quaternion.identity);
                 vfx.transform.parent = parent;
                 vfx.transform.localRotation = spawnPoint.rotation;
+                vfx.GetComponent<ProjectileMoveScript>().SetLevel(levelManager.GetCurrentLevel());
+
+                levelManager.GetCurrentLevel().SetBullet(vfx);
 
                 GameObject muzzlePrefab = effectToSpawnRight.GetComponent<ProjectileMoveScript>().getMuzzlePrefab();
 
@@ -62,6 +67,9 @@ public class ProjectileSpawn : MonoBehaviour
                 vfx.GetComponent<ProjectileMoveScript>().directionUp = script.directionUp;
                 vfx.GetComponent<ProjectileMoveScript>().directionRight = script.directionRight;
                 vfx.GetComponent<ProjectileMoveScript>().offset = script.offset;
+
+
+                
 
                 //AudioClip clip = vfx.GetComponent<BulletStats>().GetAudioClip();
                 //if (clip != null)
