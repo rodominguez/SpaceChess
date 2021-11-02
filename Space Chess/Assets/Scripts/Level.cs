@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Level : MonoBehaviour
     [SerializeField] private int maxBounces;
 
     private bool isFinished;
+    private Text maxBouncesText;
 
     private bool isDying;
     private int currentBounces;
@@ -60,12 +62,13 @@ public class Level : MonoBehaviour
 
     public bool IsNeedToRestart()
     {
-        return !isCanFire && bullet == null && !isFinished;
+        return !isCanFire && currentBounces < 0 && !isFinished;
     }
 
     public void SubstractBounce()
     {
         currentBounces--;
+        maxBouncesText.text = "Max Bounces: " + currentBounces;
     }
 
     public void SetBullet(GameObject bullet)
@@ -77,5 +80,16 @@ public class Level : MonoBehaviour
     public bool IsCanFire()
     {
         return isCanFire;
+    }
+
+    public void SetBouncesText(Text maxBouncesText)
+    {
+        this.maxBouncesText = maxBouncesText;
+        maxBouncesText.text = "Max Bounces: " + maxBounces;
+    }
+
+    public GameObject GetBullet()
+    {
+        return bullet;
     }
 }

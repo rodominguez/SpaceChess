@@ -7,6 +7,7 @@ public class DragAndDrop : MonoBehaviour
 {
 
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private string targetTag;
 
 
     private bool isDragged;
@@ -20,18 +21,19 @@ public class DragAndDrop : MonoBehaviour
 
             if (draggedObject == null)
                 return;
-            
+
             isDragged = true;
         }
-        
+
         if (Mouse.current.leftButton.isPressed && isDragged)
         {
             DragObject();
         }
 
-        if (!Mouse.current.leftButton.isPressed)
+        if (!Mouse.current.leftButton.isPressed && isDragged)
         {
             isDragged = false;
+            SetWallFinalPosition();
             draggedObject = null;
         }
     }
@@ -44,11 +46,11 @@ public class DragAndDrop : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            Debug.Log(hit.transform.gameObject.tag);
+            //Debug.Log(hit.transform.gameObject.tag);
 
-            if (hit.transform.gameObject.tag.Equals("Wall"))
+            if (hit.transform.gameObject.tag.Equals(targetTag))
                 return hit.transform.gameObject;
-       
+
         }
 
         return null;
@@ -57,12 +59,36 @@ public class DragAndDrop : MonoBehaviour
     private void DragObject()
     {
         Vector3 finalPosition = mainCamera.ScreenToWorldPoint(ConvertMousePosition());
-        finalPosition.z = -2f;
+        finalPosition.x = finalPosition.x > 3.5 ? 3.5f : finalPosition.x;
+        finalPosition.x = finalPosition.x < -3.5 ? -3.5f : finalPosition.x;
+
+        finalPosition.y = finalPosition.y > -0.5 ? -0.5f : finalPosition.y;
+        finalPosition.y = finalPosition.y < -7.5 ? -7.5f : finalPosition.y;
+
+        finalPosition.z = 0f;
         draggedObject.transform.position = finalPosition;
     }
 
     private Vector3 ConvertMousePosition()
     {
         return new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), 0f);
+    }
+
+    private void SetWallFinalPosition()
+    {
+        Vector3 finalPosition = new Vector3(draggedObject.transform.position.x, draggedObject.transform.position.y, -2f);
+
+        Debug.Log(finalPosition.x);
+
+        float x = (int)finalPosition.x;
+        x += finalPosition.x < 0 ? -0.5f : 0.5f;
+
+        float y = (int)finalPosition.y;
+        y += finalPosition.y < 0 ? -0.5f : 0.5f;
+
+        finalPosition.x = x;
+        finalPosition.y = y;
+
+        draggedObject.transform.position = finalPosition;
     }
 }

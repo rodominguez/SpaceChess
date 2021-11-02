@@ -146,9 +146,9 @@ public class ProjectileMoveScript : MonoBehaviour
             transform.LookAt(transform.position + direction * 10);
     }
 
-    public float Bounce(GameObject wall)
+    public float Bounce(GameObject wall, Vector3 directionBounce)
     {
-        Vector3 direction = new Vector3(transform.forward.x * -1, transform.forward.y, transform.forward.z);
+        Vector3 direction = new Vector3(transform.forward.x * directionBounce.x, transform.forward.y * directionBounce.y, transform.forward.z * directionBounce.z);
 
         transform.LookAt(transform.position + direction * 10);
         transform.position = wall.transform.position;

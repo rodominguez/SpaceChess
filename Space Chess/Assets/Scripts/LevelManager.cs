@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> levels = new List<GameObject>();
+    [SerializeField] private Text maxBounces;
 
     private GameObject currentLevel;
     private int currentLevelIndex = 0;
@@ -28,6 +30,7 @@ public class LevelManager : MonoBehaviour
         if (currentLevel == null) return;
         if (currentLevel.GetComponent<Level>().IsNeedToRestart())
         {
+            Destroy(currentLevel.GetComponent<Level>().GetBullet());
             Destroy(currentLevel);
             SpawnLevel();
         }
@@ -55,6 +58,7 @@ public class LevelManager : MonoBehaviour
         GameObject level = Instantiate(levels[currentLevelIndex], Vector3.zero, Quaternion.identity);
         level.transform.parent = transform;
         currentLevel = level;
+        level.GetComponent<Level>().SetBouncesText(maxBounces);
     }
 
     public Level GetCurrentLevel()

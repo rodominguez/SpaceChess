@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1896295247387720492, guid: 60dba87515710874a983c675a26119a2, type: 3}
+      propertyPath: m_Size.x
+      value: 0.25526404
+      objectReference: {fileID: 0}
+    - target: {fileID: 1896295247387720492, guid: 60dba87515710874a983c675a26119a2, type: 3}
+      propertyPath: m_Center.x
+      value: 0.0134795755
+      objectReference: {fileID: 0}
     - target: {fileID: 7271410977931765275, guid: 60dba87515710874a983c675a26119a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -53,7 +61,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7575923264370797654, guid: 60dba87515710874a983c675a26119a2, type: 3}
       propertyPath: m_Name
-      value: Wall-Draggable
+      value: Wall-Vertical-Draggable
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575923264370797654, guid: 60dba87515710874a983c675a26119a2, type: 3}
+      propertyPath: m_TagString
+      value: DraggableWall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60dba87515710874a983c675a26119a2, type: 3}

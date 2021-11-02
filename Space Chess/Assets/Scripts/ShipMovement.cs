@@ -15,5 +15,12 @@ public class ShipMovement : MonoBehaviour
             transform.position += new Vector3(0, 1f, 0f);
         else if (InputManager.Instance.GetShipMovementVertical() == -1)
             transform.position += new Vector3(0, -1f, 0f);
+
+        Vector3 finalPosition = transform.position;
+
+        finalPosition.x = finalPosition.x < -3.5f ? -3.5f : finalPosition.x > 3.5f ? 3.5f : finalPosition.x;
+        finalPosition.y = finalPosition.y > -0.5f ? -0.5f : finalPosition.y < -7.5f ? -7.5f : finalPosition.y;
+
+        transform.position = finalPosition;
     }
 }
