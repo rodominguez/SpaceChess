@@ -8,6 +8,7 @@ TagManager:
   - Game Achievement
   - Wall
   - DraggableWall
+  - SpawnerWall
   layers:
   - Default
   - TransparentFX

@@ -46,8 +46,6 @@ public class DragAndDrop : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            //Debug.Log(hit.transform.gameObject.tag);
-
             if (hit.transform.gameObject.tag.Equals(targetTag))
                 return hit.transform.gameObject;
 
@@ -78,8 +76,6 @@ public class DragAndDrop : MonoBehaviour
     {
         Vector3 finalPosition = new Vector3(draggedObject.transform.position.x, draggedObject.transform.position.y, -2f);
 
-        Debug.Log(finalPosition.x);
-
         float x = (int)finalPosition.x;
         x += finalPosition.x < 0 ? -0.5f : 0.5f;
 
@@ -90,5 +86,16 @@ public class DragAndDrop : MonoBehaviour
         finalPosition.y = y;
 
         draggedObject.transform.position = finalPosition;
+    }
+
+    public void SetDraggedObject(GameObject draggedObject)
+    {
+        this.draggedObject = draggedObject;
+        isDragged = true;
+    }
+
+    public bool GetIsDragged()
+    {
+        return isDragged;
     }
 }

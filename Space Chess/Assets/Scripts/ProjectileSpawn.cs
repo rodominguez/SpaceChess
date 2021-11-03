@@ -13,13 +13,12 @@ public class ProjectileSpawn : MonoBehaviour
 
     [SerializeField] private LevelManager levelManager;
 
+    [SerializeField] private AudioClip clip;
+
+    [SerializeField] private AudioSource audioSource;
+
     private int currentIndex = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -29,6 +28,10 @@ public class ProjectileSpawn : MonoBehaviour
 
     void Shoot()
     {
+        if (GetComponent<Appearance>().GetIsBlack())
+            currentIndex = 1;
+        else
+            currentIndex = 0;
         GameObject effectToSpawnRight = projectiles[currentIndex];
         if (InputManager.Instance.GetShoot(1f / effectToSpawnRight.GetComponent<ProjectileMoveScript>().fireRate) && levelManager.GetCurrentLevel().IsCanFire())
         {
@@ -71,11 +74,11 @@ public class ProjectileSpawn : MonoBehaviour
 
                 
 
-                //AudioClip clip = vfx.GetComponent<BulletStats>().GetAudioClip();
-                //if (clip != null)
-                //{
-                    //Play Audio
-                //}
+                if (clip != null)
+                {
+                    audioSource.clip = clip;
+                    audioSource.Play();
+                }
             }
             }
         }
