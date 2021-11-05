@@ -65,6 +65,7 @@ public class WallSpawner : MonoBehaviour
 
     private bool IsWallAvailable()
     {
+        if (levelManager.GetCurrentLevel() == null) return false;
         if (isHorizontal)
         {
             return levelManager.GetCurrentLevel().GetCurrentHorizontalWalls() > 0;

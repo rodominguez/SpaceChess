@@ -15,7 +15,7 @@ public class DragAndDrop : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current.leftButton.isPressed && !isDragged)
+        if (InputManager.Instance.IsPressed() && !isDragged)
         {
             draggedObject = CollisionCheck();
 
@@ -25,12 +25,12 @@ public class DragAndDrop : MonoBehaviour
             isDragged = true;
         }
 
-        if (Mouse.current.leftButton.isPressed && isDragged)
+        if (InputManager.Instance.IsPressed() && isDragged)
         {
             DragObject();
         }
 
-        if (!Mouse.current.leftButton.isPressed && isDragged)
+        if (!InputManager.Instance.IsPressed() && isDragged)
         {
             isDragged = false;
             SetWallFinalPosition();
@@ -41,7 +41,7 @@ public class DragAndDrop : MonoBehaviour
     private GameObject CollisionCheck()
     {
         RaycastHit hit;
-        Vector3 mousePosition = ConvertMousePosition();
+        Vector3 mousePosition = InputManager.Instance.GetMousePosition();
         Ray ray = mainCamera.ScreenPointToRay(mousePosition);
 
         if (Physics.Raycast(ray, out hit))
@@ -56,7 +56,7 @@ public class DragAndDrop : MonoBehaviour
 
     private void DragObject()
     {
-        Vector3 finalPosition = mainCamera.ScreenToWorldPoint(ConvertMousePosition());
+        Vector3 finalPosition = mainCamera.ScreenToWorldPoint(InputManager.Instance.GetMousePosition());
         finalPosition.x = finalPosition.x > 3.5 ? 3.5f : finalPosition.x;
         finalPosition.x = finalPosition.x < -3.5 ? -3.5f : finalPosition.x;
 
@@ -65,11 +65,6 @@ public class DragAndDrop : MonoBehaviour
 
         finalPosition.z = 0f;
         draggedObject.transform.position = finalPosition;
-    }
-
-    private Vector3 ConvertMousePosition()
-    {
-        return new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), 0f);
     }
 
     private void SetWallFinalPosition()
