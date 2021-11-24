@@ -51,6 +51,15 @@ public class InputManager : Singleton<InputManager>
         return false;
     }
 
+    public bool GetShoot()
+    {
+        if (controls.Gameplay.shoot.ReadValue<float>() > 0.1)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public float GetShipMovementHorizontal()
     {
         if (controls.Gameplay.moveRight.triggered)

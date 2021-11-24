@@ -9,9 +9,9 @@ public class WallBounce : MonoBehaviour
     private float tagTime;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Bullet") && tagTime <= Time.time)
+        if (other.tag.Equals("Player") && other.GetComponent<ShipMovement>().GetIsShoot() && tagTime <= Time.time)
         {
-            tagTime = other.GetComponent<ProjectileMoveScript>().Bounce(gameObject, directionBounce);
+            tagTime = other.GetComponent<ShipMovement>().Bounce(gameObject, directionBounce);
         }
     }
 }

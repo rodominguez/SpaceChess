@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bishop.unity
     guid: 90209053f6709064fac37dfde085aa79
+  - enabled: 1
+    path: Assets/Scenes/BishopTest.unity
+    guid: 96e9da20983284f41ab131cac3fd8140
   m_configObjects: {}

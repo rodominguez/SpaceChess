@@ -13,6 +13,10 @@ public class Level : MonoBehaviour
     [SerializeField] private long pointsPerTarget;
     [SerializeField] private long pointsPerBounce;
     [SerializeField] private long pointsPerWall;
+    [SerializeField] private Vector3 startPosition;
+    [SerializeField] private bool isUseStartPosition;
+    [TextArea]
+    [SerializeField] private string tips;
 
     private bool isFinished;
     private Text maxBouncesText;
@@ -25,7 +29,6 @@ public class Level : MonoBehaviour
     private int currentHorizontalWalls;
 
     private bool isCanFire;
-    private GameObject bullet;
 
     private void Start()
     {
@@ -74,19 +77,13 @@ public class Level : MonoBehaviour
 
     public bool IsNeedToRestart()
     {
-        return !isCanFire && currentBounces < 0 && !isFinished;
+        return currentBounces < 0 && !isFinished;
     }
 
     public void SubstractBounce()
     {
         currentBounces--;
         maxBouncesText.text = "Max Bounces: " + currentBounces;
-    }
-
-    public void SetBullet(GameObject bullet)
-    {
-        this.bullet = bullet;
-        isCanFire = false;
     }
 
     public bool IsCanFire()
@@ -110,11 +107,6 @@ public class Level : MonoBehaviour
     {
         this.horizontalWallsText = horizontalWallsText;
         this.horizontalWallsText.text = "" + maxHorizontalWalls;
-    }
-
-    public GameObject GetBullet()
-    {
-        return bullet;
     }
 
     public bool GetIsBlack()
@@ -148,5 +140,21 @@ public class Level : MonoBehaviour
     {
         currentHorizontalWalls--;
         this.horizontalWallsText.text = "" + currentHorizontalWalls;
+    }
+
+    public bool IsCanDrag()
+    {
+        return isCanFire;
+    }
+
+    public void SetPlayerPosition(GameObject player)
+    {
+        if (isUseStartPosition)
+            player.transform.position = startPosition;
+    }
+
+    public string GetTips()
+    {
+        return tips;
     }
 }

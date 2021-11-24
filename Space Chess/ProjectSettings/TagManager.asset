@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - DraggableWall
   - SpawnerWall
+  - BlackHole
   layers:
   - Default
   - TransparentFX

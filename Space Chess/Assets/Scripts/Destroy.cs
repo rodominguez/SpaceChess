@@ -19,18 +19,31 @@ public class Destroy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Bullet")) { 
-            if (audioSource != null)
-                audioSource.Play();
-
-            if (visualEffect != null)
-                visualEffect.SetInt("Rate", 0);
-            if (beam != null)
-                beam.SetActive(false);
-            timeToDie = Time.time + 5;
-            isDead = true;
-            GetComponent<Collider>().enabled = false;
+        if (other.tag.Equals("Player") && other.GetComponent<ShipMovement>().GetIsShoot() && (other.GetComponent<ValidMoves>() == null ? true : other.GetComponent<ValidMoves>().GetIsValid())) {
+            DestroyObject();
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag.Equals("Player") && other.GetComponent<ShipMovement>().GetIsShoot() && (other.GetComponent<ValidMoves>() == null ? true : other.GetComponent<ValidMoves>().GetIsValid()))
+        {
+            DestroyObject();
+        }
+    }
+
+    public void DestroyObject()
+    {
+        if (audioSource != null)
+            audioSource.Play();
+
+        if (visualEffect != null)
+            visualEffect.SetInt("Rate", 0);
+        if (beam != null)
+            beam.SetActive(false);
+        timeToDie = Time.time + 5;
+        isDead = true;
+        GetComponent<Collider>().enabled = false;
     }
 
     public bool IsDead()

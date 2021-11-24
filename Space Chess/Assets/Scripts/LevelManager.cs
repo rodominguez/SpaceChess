@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -11,16 +12,25 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Text verticalWalls;
     [SerializeField] private Text horizontalWalls;
     [SerializeField] private GameObject draggableWallsParent;
+    [SerializeField] private List<GameObject> lives = new List<GameObject>();
+    [SerializeField] private GameObject endScreen;
+    [SerializeField] private Text tips;
+    [SerializeField] private int gameType;
+    [SerializeField] private GameObject mainPanel;
 
     private GameObject currentLevel;
     private int currentLevelIndex = 0;
 
     private float timeToSpawn = 0f;
     private bool isSpawning;
+    private int currentLives;
+    private float levelTime;
 
     private void Start()
     {
+        HTTPClient.Instance.AddGameRequest(gameType, 0);
         SpawnLevel();
+        currentLives = lives.Count;
     }
 
     private void Update()
@@ -32,11 +42,21 @@ public class LevelManager : MonoBehaviour
     private void RestartLevel()
     {
         if (currentLevel == null) return;
-        if (currentLevel.GetComponent<Level>().IsNeedToRestart())
+        if (currentLevel.GetComponent<Level>().IsNeedToRestart() || player.GetComponent<DIe>().GetIsDead())
         {
-            Destroy(currentLevel.GetComponent<Level>().GetBullet());
+            HTTPClient.Instance.AddLevelRequest(0, (long)(Time.time - levelTime), currentLevelIndex);
+            LoseLife();
+            if (!player.GetComponent<ShipMovement>().GetIsDragAndDropMode())
+                player.GetComponent<ShootPlayer>().ResetPlayer(player.GetComponent<DIe>().GetIsDead());
+            if (player.GetComponent<ValidMoves>() != null)
+            {
+                player.transform.position = player.GetComponent<DragAndDrop>().GetInitialPosition();
+                player.GetComponent<ShipMovement>().SetIsShoot(true);
+            }
+            player.GetComponent<DIe>().Revive();
             Destroy(currentLevel);
             DeleteDraggableWalls();
+            currentLevel.GetComponent<Level>().SetPlayerPosition(player);
             SpawnLevel();
         }
     }
@@ -45,6 +65,10 @@ public class LevelManager : MonoBehaviour
     {
         if (currentLevel != null && currentLevel.GetComponent<Level>().IsFinished() && !isSpawning)
         {
+            if (!player.GetComponent<ShipMovement>().GetIsDragAndDropMode())
+                player.GetComponent<ShootPlayer>().ResetPlayer();
+            HTTPClient.Instance.AddLevelRequest(player.GetComponent<PointSystem>().CalculateLevelPoints(currentLevel.GetComponent<Level>().AwardPoints()),
+                (long)(Time.time - levelTime), currentLevelIndex);
             player.GetComponent<PointSystem>().AddPoints(currentLevel.GetComponent<Level>().AwardPoints());
             DeleteDraggableWalls();
             isSpawning = true;
@@ -55,9 +79,33 @@ public class LevelManager : MonoBehaviour
         {
             currentLevelIndex++;
             if (currentLevelIndex < levels.Count)
+            {
                 SpawnLevel();
+                currentLevel.GetComponent<Level>().SetPlayerPosition(player);
+            }
+            else
+                ShowEndScreen();
             isSpawning = false;
         }
+    }
+
+    private void LoseLife()
+    {
+        currentLives--;
+        lives[currentLives].SetActive(false);
+        if (currentLives == 0)
+            ShowEndScreen();
+    }
+
+    private void ShowEndScreen()
+    {
+        int livesToSend = gameType == 1 ? currentLives : 0;
+        HTTPClient.Instance.UpdateGameScoreRequest(player.GetComponent<PointSystem>().GetFinalPoints(livesToSend));
+        endScreen.SetActive(true);
+        if (endScreen.GetComponent<GameResults>() != null)
+            endScreen.GetComponent<GameResults>().SetPoints(player.GetComponent<PointSystem>().GetFinalPoints(livesToSend));
+        player.SetActive(false);
+        mainPanel.SetActive(false);
     }
 
     private void SpawnLevel()
@@ -70,6 +118,32 @@ public class LevelManager : MonoBehaviour
         level.GetComponent<Level>().SetHorizontalWallsText(horizontalWalls);
         player.GetComponent<Appearance>().SetAppearance(level.GetComponent<Level>().GetIsBlack());
         player.GetComponent<ShipMovement>().SetIsBlack(level.GetComponent<Level>().GetIsBlack());
+        tips.text = "Tips: \n" + level.GetComponent<Level>().GetTips();
+        levelTime = Time.time;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("Bishop", LoadSceneMode.Single);
+        /*endScreen.SetActive(false);
+        player.SetActive(true);
+        currentLives = 3;
+
+        foreach (GameObject o in lives)
+            o.SetActive(true);
+
+        if (currentLevel != null)
+        {
+            player.GetComponent<ShootPlayer>().ResetPlayer();
+            player.GetComponent<PointSystem>().Reset();
+            DeleteDraggableWalls();
+            isSpawning = true;
+            timeToSpawn = Time.time + 4f;
+        }
+
+        currentLevelIndex = 0;
+
+        SpawnLevel();*/
     }
 
     public Level GetCurrentLevel()

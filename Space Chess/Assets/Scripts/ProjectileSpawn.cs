@@ -46,8 +46,6 @@ public class ProjectileSpawn : MonoBehaviour
                 vfx.transform.localRotation = spawnPoint.rotation;
                 vfx.GetComponent<ProjectileMoveScript>().SetLevel(levelManager.GetCurrentLevel());
 
-                levelManager.GetCurrentLevel().SetBullet(vfx);
-
                 GameObject muzzlePrefab = effectToSpawnRight.GetComponent<ProjectileMoveScript>().getMuzzlePrefab();
 
                 if (muzzlePrefab != null)

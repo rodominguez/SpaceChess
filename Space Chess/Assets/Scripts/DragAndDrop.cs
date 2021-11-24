@@ -11,18 +11,23 @@ public class DragAndDrop : MonoBehaviour
 
 
     private bool isDragged;
+    private bool isFinalPositionSet;
     private GameObject draggedObject;
+    private Vector3 initialPosition;
 
     private void Update()
     {
+
         if (InputManager.Instance.IsPressed() && !isDragged)
         {
             draggedObject = CollisionCheck();
-
+            
             if (draggedObject == null)
                 return;
 
+            initialPosition = draggedObject.transform.position;
             isDragged = true;
+            isFinalPositionSet = false;
         }
 
         if (InputManager.Instance.IsPressed() && isDragged)
@@ -34,6 +39,7 @@ public class DragAndDrop : MonoBehaviour
         {
             isDragged = false;
             SetWallFinalPosition();
+            isFinalPositionSet = true;
             draggedObject = null;
         }
     }
@@ -63,7 +69,7 @@ public class DragAndDrop : MonoBehaviour
         finalPosition.y = finalPosition.y > -0.5 ? -0.5f : finalPosition.y;
         finalPosition.y = finalPosition.y < -7.5 ? -7.5f : finalPosition.y;
 
-        finalPosition.z = 0f;
+        finalPosition.z = -5;
         draggedObject.transform.position = finalPosition;
     }
 
@@ -92,5 +98,15 @@ public class DragAndDrop : MonoBehaviour
     public bool GetIsDragged()
     {
         return isDragged;
+    }
+
+    public bool GetIsFinalPositionSet()
+    {
+        return isFinalPositionSet;
+    }
+
+    public Vector3 GetInitialPosition()
+    {
+        return initialPosition;
     }
 }

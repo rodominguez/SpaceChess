@@ -7,42 +7,49 @@ public class RotateSpawn : MonoBehaviour
 
     [SerializeField] private Transform spawn;
 
+    [SerializeField] private Vector3 northEast;
+    [SerializeField] private Vector3 southEast;
+    [SerializeField] private Vector3 southWest;
+    [SerializeField] private Vector3 northWest;
+    [SerializeField] private ShipMovement shipMovement;
+
     bool isDown;
     bool isLeft;
 
     private void Update()
     {
+        if (shipMovement.GetIsShoot()) return;
         if (InputManager.Instance.GetSwitchAngleHorizontal() == 1)
         {
             if (!isDown)
-                spawn.eulerAngles = new Vector3(0, 0, -45);
+                spawn.eulerAngles = northEast;
             else
-                spawn.eulerAngles = new Vector3(0, 0, -135);
+                spawn.eulerAngles = southEast;
             isLeft = false;
         }
         else if (InputManager.Instance.GetSwitchAngleHorizontal() == -1)
         {
             if (!isDown)
-                spawn.eulerAngles = new Vector3(0, 0, 45);
+                spawn.eulerAngles = northWest;
             else
-                spawn.eulerAngles = new Vector3(0, 0, 135);
+                spawn.eulerAngles = southWest;
             isLeft = true;
         }
 
         if (InputManager.Instance.GetSwitchAngleVertical() == 1)
         {
             if (!isLeft)
-                spawn.eulerAngles = new Vector3(0, 0, -45);
+                spawn.eulerAngles = northEast;
             else
-                spawn.eulerAngles = new Vector3(0, 0, 45);
+                spawn.eulerAngles = northWest;
             isDown = false;
         }
         else if (InputManager.Instance.GetSwitchAngleVertical() == -1)
         {
             if (!isLeft)
-                spawn.eulerAngles = new Vector3(0, 0, -135);
+                spawn.eulerAngles = southEast;
             else
-                spawn.eulerAngles = new Vector3(0, 0, 135);
+                spawn.eulerAngles = southWest;
             isDown = true;
         }  
     }
